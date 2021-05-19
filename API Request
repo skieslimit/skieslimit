@@ -1,0 +1,55 @@
+import sys
+import os
+import datetime
+import glob
+import re
+import json
+import requests
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+
+
+#'http://devgxsco01:44499/api/website'
+def main():
+    #debug
+    URL2 = 'http://devgxsco01:44499/api/website'
+    request = requests.get(URL2)
+    print(request.text)
+    request_json = request.json()
+    print(request_json)
+    website = request_json["WebsiteUrl"]
+    HtmlTag = request_json["HtmlTag"]
+    Filepath = request_json["Filepath"]
+    print(Filepath)
+    print(HtmlTag)
+    print(website)
+
+soup = BeautifulSoup("https://devguide.python.org/", 'html.parser')
+
+if __name__ == '__main__':
+  main()
+
+
+#Def main():
+   # api_url_base = 'http://devgxsco01:44499/api/website'
+
+#request = requests.get('api_url_base')
+#print(request.text)
+
+#begin random wikipedia usage
+
+
+#with urlopen('https://en.wikipedia.org/wiki/Main_Page') as response:
+  #  soup = BeautifulSoup(response, 'html.parser')
+   # for anchor in soup.find_all('a'):
+    #    print(anchor.get('href', '/'))
+#def callapirobut():
+    
+   # api_url = '{0}account'.format(api_url_base)
+
+    #response = requests.get(api_url, headers=headers)
+
+   # if response.status_code == 200:
+   #     return json.loads(response.content.decode('utf-8'))
+    ##else:
+     #   return None
