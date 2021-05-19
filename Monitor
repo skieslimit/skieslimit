@@ -1,0 +1,901 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object class="Robot" serializationversion="2">
+  <prologue>
+    <saved-by-versions>
+      <version>10.3.2.7</version>
+    </saved-by-versions>
+    <referenced-types>
+      <type name="UserEmails"/>
+    </referenced-types>
+    <referenced-snippets>
+      <snippet name="InsertIntoEmailQueue"/>
+      <snippet name="GetLastRobotRun"/>
+      <snippet name="Debug"/>
+    </referenced-snippets>
+    <triggers/>
+    <typed-variables>
+      <typed-variable name="UserEmails" type-name="UserEmails"/>
+    </typed-variables>
+    <global-variables/>
+    <parameters>
+      <parameter name="UserEmails" type-name="UserEmails"/>
+    </parameters>
+    <return-variables/>
+    <store-in-database-variables/>
+    <device-mappings/>
+    <browser-engine>WEBKIT</browser-engine>
+  </prologue>
+  <property name="variables" class="Variables">
+    <object class="Variable" serializationversion="1">
+      <property name="name" class="String">Deactivated</property>
+      <property name="global" class="Boolean">true</property>
+      <property name="initialAssignment" class="InitialVariableAssignment">
+        <property name="type" class="SimpleTypeReference" id="0">
+          <property name="simpleTypeId" class="Integer">13</property>
+        </property>
+      </property>
+    </object>
+    <object class="Variable" serializationversion="1">
+      <property name="name" class="String" id="1">RobotName</property>
+      <property name="initialAssignment" class="InitialVariableAssignment">
+        <property name="type" class="SimpleTypeReference">
+          <property name="simpleTypeId" class="Integer">12</property>
+        </property>
+      </property>
+    </object>
+    <object class="Variable" serializationversion="1">
+      <property name="name" class="String">UserEmails</property>
+      <property name="parameter" class="Boolean">true</property>
+      <property name="initialAssignment" class="InitialVariableAssignment">
+        <property name="type" class="TypeReference" serializationversion="0">
+          <property name="typeName" class="String">UserEmails</property>
+        </property>
+      </property>
+    </object>
+    <object class="Variable" serializationversion="1">
+      <property name="name" class="String" id="2">DailyErrors</property>
+      <property name="global" class="Boolean">true</property>
+      <property name="initialAssignment" class="InitialVariableAssignment">
+        <property name="type" idref="0"/>
+      </property>
+    </object>
+    <object class="Variable" serializationversion="1">
+      <property name="name" class="String" id="3">NumberOfErrors</property>
+      <property name="initialAssignment" class="InitialVariableAssignment">
+        <property name="type" class="SimpleTypeReference">
+          <property name="simpleTypeId" class="Integer">7</property>
+        </property>
+      </property>
+    </object>
+  </property>
+  <property name="proxyServerConfiguration" class="ProxyServerConfiguration" serializationversion="0"/>
+  <property name="httpClientType" class="HttpClientType">
+    <property name="enum-name" class="String">WEBKIT</property>
+  </property>
+  <property name="ntlmAuthentication" class="NTLMAuthenticationType">
+    <property name="enum-name" class="String">STANDARD</property>
+  </property>
+  <property name="usePre96DefaultWaiting" class="Boolean" id="4">false</property>
+  <property name="maxWaitForTimeout" class="Integer">10000</property>
+  <property name="waitRealTime" idref="4"/>
+  <property name="privateHTTPCacheEnabled" class="Boolean" id="5">true</property>
+  <property name="privateHTTPCacheSize" class="Integer">2048</property>
+  <property name="comment">
+    <null/>
+  </property>
+  <property name="executionMode" class="ExecutionMode">
+    <property name="enum-name" class="String">DIRECT</property>
+  </property>
+  <property name="avoidExternalReExecution" idref="4"/>
+  <property name="transitionGraph" class="Body">
+    <blockBeginStep class="BlockBeginStep" id="6"/>
+    <steps class="ArrayList">
+      <object class="SnippetStep" id="7">
+        <name>
+          <null/>
+        </name>
+        <snippetName class="String">Debug</snippetName>
+        <snippetStepComment>
+          <null/>
+        </snippetStepComment>
+      </object>
+      <object class="SnippetStep" id="8">
+        <name>
+          <null/>
+        </name>
+        <snippetName class="String">GetLastRobotRun</snippetName>
+        <snippetStepComment>
+          <null/>
+        </snippetStepComment>
+      </object>
+      <object class="BranchPoint" id="9"/>
+      <object class="Transition" serializationversion="3" id="10">
+        <property name="name" class="String">Query For Robot Not Valid</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowLogs"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+"+(Debug? "USE KAPOWLOGS" : "")+"
+SELECT 
+RR.[RobotName]
+FROM Robot_Run RR
+INNER JOIN Robot_Message RM on RM.ExecutionID = RR.ExecutionID
+WHERE RM.Message like '%The robot is not valid%'
+AND RR.StartRequestedTime &gt; '"+LastRunTime+"'
+
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" idref="1"/>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders" id="11"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String" id="12">name</element>
+        </property>
+      </object>
+      <object class="Transition" serializationversion="3" id="13">
+        <property name="name" class="String">Assign Robot Not Valid</property>
+        <property name="stepAction" class="AssignVariable" serializationversion="4">
+          <property name="stringExpr" class="Expression" serializationversion="1">
+            <property name="text" class="String">EmailTable == "" ? RobotName + "Is Not Valid" : EmailTable + "\n" + RobotName + " Is Not Valid""</property>
+          </property>
+          <property name="variable" class="kapow.robot.plugin.common.support.AttributeName2">
+            <property name="name" class="String" id="14">EmailTable</property>
+          </property>
+        </property>
+        <property name="elementFinders" idref="11"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0"/>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element idref="12"/>
+        </property>
+      </object>
+      <object class="End" id="15"/>
+      <object class="Transition" serializationversion="3" id="16">
+        <property name="name" class="String">Query For Spinning Robots</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowLogs"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+"+(Debug? "USE KAPOWLOGS" : "")+"
+SELECT 
+RR.[RobotName]
+FROM Robot_Run RR
+INNER JOIN Robot_Message RM on RM.ExecutionID = RR.ExecutionID
+WHERE RR.StartRequestedTime &lt; DateAdd(hour,-6,getdate())
+AND EndTime is null
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">RobotName</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment" class="String">Schedules that have started and not ended within 6 hours</property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="Transition" serializationversion="3" id="17">
+        <property name="name" class="String">Assign Spinning Out</property>
+        <property name="stepAction" class="AssignVariable" serializationversion="4">
+          <property name="stringExpr" class="Expression" serializationversion="1">
+            <property name="text" class="String">EmailTable == "" ? RobotName + "is long running" : EmailTable + "\n" + RobotName + " Long Running""</property>
+          </property>
+          <property name="variable" class="kapow.robot.plugin.common.support.AttributeName2">
+            <property name="name" class="String">EmailTable</property>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0"/>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="End" id="18"/>
+      <object class="Transition" serializationversion="3" id="19">
+        <property name="name" class="String">Query For Released Robots</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowMC"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+"+(Debug? "USE KAPOWMC" : "")+"
+SELECT 
+RR.[RobotName]
+FROM MC_Robot MR
+WHERE LastModified &gt; '"+LastRunTime+"'
+
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">RobotName</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="Transition" serializationversion="3" id="20">
+        <property name="name" class="String">Query For Robot Erroring</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowLogs"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+"+(Debug? "USE KAPOWLOGS" : "")+"
+SELECT 
+RR.[RobotName]
+FROM Robot_Run RR
+WHERE RR.RobotName = '"+RobotName+"'
+AND RR.ErrorCount &gt; 0
+
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">RobotName</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="Transition" serializationversion="3" id="21">
+        <property name="name" class="String">Assign Email Released &amp; Erroring</property>
+        <property name="stepAction" class="AssignVariable" serializationversion="4">
+          <property name="stringExpr" class="Expression" serializationversion="1">
+            <property name="text" class="String">EmailTable == "" ? RobotName + "was released and is now erroring" : EmailTable + "\n" + RobotName + " was released and is now erroring""</property>
+          </property>
+          <property name="variable" class="kapow.robot.plugin.common.support.AttributeName2">
+            <property name="name" class="String">EmailTable</property>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0"/>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="End" id="22"/>
+      <object class="Try" id="23">
+        <property name="name" class="String">Time to send Daily Email</property>
+      </object>
+      <object class="Transition" serializationversion="3" id="24">
+        <property name="name" class="String">Query Previous Daily Error Email</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowData"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+SELECT TOP 1 
+[EmailSubject]
+FROM EmailLog
+WHERE EmailSubject = 'Daily Errors'
+AND CreateDateTime &gt; DateAdd(-1,day,getdate())
+;
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">EmailSubject</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">EmailLog.EmailSubject</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" idref="11"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+          <property name="controlFlow" class="kapow.robot.robomaker.robot.ControlFlow$NextAlternative"/>
+        </property>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element idref="12"/>
+        </property>
+      </object>
+      <object class="End" id="25"/>
+      <object class="BranchPoint" id="26"/>
+      <object class="Transition" serializationversion="3" id="27">
+        <property name="name" class="String">Query Error Report</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowLogs"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+"+(Debug? "USE KAPOWLOGS" : "")+"
+
+Select 
+[RobotName]
+,SUm(ERRORCOUNT) SumOfErrors 
+FROM Robot_Run RR
+WHERE RR.StartRequestedTime &gt; DateAdd(Day,-1,getdate())
+AND ErrorCount &gt; 0
+AND ProjectName &lt;&gt; 'Development'
+AND RobotName &lt;&gt; 'UPSInOutTimeConsumerFastlane'
+Group By RobotName
+order by sum(ERRORCOUNT)desc
+
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">RobotName</property>
+              </property>
+            </object>
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">SumOfErrors</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" idref="3"/>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="Transition" serializationversion="3" id="28">
+        <property name="name" class="String">Assign Daily Report</property>
+        <property name="stepAction" class="AssignVariable" serializationversion="4">
+          <property name="stringExpr" class="kapow.robot.plugin.common.support.expression.multipletype.StringProcessorsExpression" serializationversion="0">
+            <property name="dataConverters" class="DataConverters">
+              <element class="EvaluateExpression" serializationversion="0">
+                <property name="expression" class="String">DailyErrors + "\n &lt;tr&gt;" + 
+"&lt;td&gt;" + RobotName + "&lt;/td&gt;" +
+"&lt;td&gt;" + NumberOfErrors + "&lt;/td&gt;" +
+
+"&lt;td&gt;" + INPUT + "&lt;/td&gt;&lt;/tr&gt;"</property>
+              </element>
+            </property>
+          </property>
+          <property name="variable" class="kapow.robot.plugin.common.support.AttributeName2">
+            <property name="name" idref="2"/>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0"/>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="End" id="29"/>
+      <object class="Transition" serializationversion="3" id="30">
+        <property name="name" class="String">Query Total Errors</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowLogs"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+"+(Debug? "USE KAPOWLOGS" : "")+"
+
+Select 
+[RobotName]
+,SUm(ERRORCOUNT) SumOfErrors 
+FROM Robot_Run RR
+WHERE RR.StartRequestedTime &gt; DateAdd(Day,-1,getdate())
+AND ErrorCount &gt; 0
+AND ProjectName &lt;&gt; 'Development'
+AND RobotName &lt;&gt; 'UPSInOutTimeConsumerFastlane'
+Group By RobotName
+order by sum(ERRORCOUNT)desc
+
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">RobotName</property>
+              </property>
+            </object>
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">SumOfErrors</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">NumberOfErrors</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="End" id="31"/>
+      <object class="Transition" serializationversion="3" id="32">
+        <property name="name" class="String">Query Runs With Error</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowLogs"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+"+(Debug? "USE KAPOWLOGS" : "")+"
+
+Select 
+[RobotName]
+,SUm(ERRORCOUNT) SumOfErrors 
+FROM Robot_Run RR
+WHERE RR.StartRequestedTime &gt; DateAdd(Day,-1,getdate())
+AND ErrorCount &gt; 0
+AND ProjectName &lt;&gt; 'Development'
+AND RobotName &lt;&gt; 'UPSInOutTimeConsumerFastlane'
+Group By RobotName
+order by sum(ERRORCOUNT)desc
+
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">RobotName</property>
+              </property>
+            </object>
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">SumOfErrors</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">NumberOfErrors</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="End" id="33"/>
+      <object class="Transition" serializationversion="3" id="34">
+        <property name="name" class="String">Query Total Runs</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="Expression" serializationversion="1">
+            <property name="text" class="String">Debug? "KapowProdRead" : "KapowLogs"</property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+"+(Debug? "USE KAPOWLOGS" : "")+"
+
+Select 
+[RobotName]
+,SUm(ERRORCOUNT) SumOfErrors 
+FROM Robot_Run RR
+WHERE RR.StartRequestedTime &gt; DateAdd(Day,-1,getdate())
+AND ErrorCount &gt; 0
+AND ProjectName &lt;&gt; 'Development'
+AND RobotName &lt;&gt; 'UPSInOutTimeConsumerFastlane'
+Group By RobotName
+order by sum(ERRORCOUNT)desc
+
+"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">RobotName</property>
+              </property>
+            </object>
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">SumOfErrors</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">NumberOfErrors</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="End" id="35"/>
+      <object class="Transition" serializationversion="3" id="36">
+        <property name="name" class="String">Assign Email</property>
+        <property name="stepAction" class="AssignVariable" serializationversion="4">
+          <property name="stringExpr" class="Expression" serializationversion="1">
+            <property name="text" class="String">EmailTable + DailyErrors</property>
+          </property>
+          <property name="variable" class="kapow.robot.plugin.common.support.AttributeName2">
+            <property name="name" class="String">EmailTable</property>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0"/>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="End" id="37"/>
+      <object class="Transition" serializationversion="3" id="38">
+        <property name="name" class="String">Check for Disabled Robots</property>
+        <property name="stepAction" class="QueryDatabase2" serializationversion="1">
+          <property name="databaseName" class="kapow.robot.plugin.common.support.expression.stringexpr.DBNameValueStringExpression">
+            <property name="value" class="kapow.util.db.DBName">
+              <property name="name" class="String">KapowLogs</property>
+            </property>
+          </property>
+          <property name="sql" class="String">"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+DECLARE @THREEWEEKS DATETIME = DATEADD(WEEK, - 1, GETDATE())
+DECLARE @ONEWEEK DATETIME = DATEADD(day, - 4, GETDATE())
+DECLARE @ONEDAY DATETIME = DATEADD(DAY, - 1, GETDATE())
+DECLARE @NOW DATETIME = GETDATE();
+
+WITH X_CTE (ROBOTNAME)
+AS (
+	SELECT DISTINCT (ROBOTNAME)
+	FROM ROBOT_RUN
+	WHERE STARTTIME BETWEEN @ONEDAY
+			AND @NOW
+	)
+SELECT DISTINCT (RR.ROBOTNAME)
+FROM ROBOT_RUN RR 
+LEFT OUTER JOIN X_CTE ON X_CTE.ROBOTNAME = RR.ROBOTNAME 
+WHERE RR.STARTTIME BETWEEN @THREEWEEKS
+		AND @ONEWEEK
+	AND X_CTE.ROBOTNAME IS NULL"</property>
+          <property name="columnAttributeMappings" class="kapow.robot.plugin.common.support.database.ColumnAttributeMappings">
+            <object class="kapow.robot.plugin.common.support.database.ColumnAttributeMapping">
+              <property name="columnName" class="String">RobotName</property>
+              <property name="attributeName" class="kapow.robot.plugin.common.support.AttributeName2">
+                <property name="name" class="String">RobotName</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0">
+          <property name="changedProperties" class="java.util.HashSet">
+            <element class="String">reportingViaAPI</element>
+            <element class="String">reportingViaLog</element>
+          </property>
+          <property name="reportingViaAPI" class="Boolean">false</property>
+          <property name="reportingViaLog" class="Boolean">false</property>
+        </property>
+        <property name="comment" class="String">Robots will appear on this report for up to 3 weeks after being disabled
+</property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="Transition" serializationversion="3" id="39">
+        <property name="name" class="String">List Robots Turned Off</property>
+        <property name="stepAction" class="AssignVariable" serializationversion="4">
+          <property name="stringExpr" class="Expression" serializationversion="1">
+            <property name="text" class="String">Deactivated == "" ? RobotName : Deactivated + ", "+RobotName</property>
+          </property>
+          <property name="variable" class="kapow.robot.plugin.common.support.AttributeName2">
+            <property name="name" class="String">Deactivated</property>
+          </property>
+        </property>
+        <property name="elementFinders" class="ElementFinders"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0"/>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet">
+          <element class="String">name</element>
+        </property>
+      </object>
+      <object class="End" id="40"/>
+      <object class="Transition" serializationversion="3" id="41">
+        <property name="name" class="String">Convert Variables</property>
+        <property name="stepAction" class="ConvertVariables">
+          <property name="entries" class="kapow.robot.plugin.common.stateprocessor.attributeconverter.AttributeConverterEntries">
+            <object class="kapow.robot.plugin.common.stateprocessor.attributeconverter.AttributeConverterEntry" serializationversion="0">
+              <property name="fromAttributeName" class="kapow.robot.plugin.common.support.AttributeName">
+                <property name="name" class="String">UserEmails.UserEmails</property>
+              </property>
+              <property name="toAttributeName" class="kapow.robot.plugin.common.support.AttributeName">
+                <property name="name" class="String">EmailLog.ToAddress</property>
+              </property>
+            </object>
+            <object class="kapow.robot.plugin.common.stateprocessor.attributeconverter.AttributeConverterEntry" serializationversion="0">
+              <property name="fromAttributeName" class="kapow.robot.plugin.common.support.AttributeName">
+                <property name="name" idref="14"/>
+              </property>
+              <property name="toAttributeName" class="kapow.robot.plugin.common.support.AttributeName">
+                <property name="name" class="String">EmailLog.EmailMessage</property>
+              </property>
+            </object>
+          </property>
+        </property>
+        <property name="elementFinders" idref="11"/>
+        <property name="errorHandler" class="ErrorHandler" serializationversion="0"/>
+        <property name="comment">
+          <null/>
+        </property>
+        <property name="enabled" idref="5"/>
+        <property name="changedProperties" class="java.util.HashSet"/>
+      </object>
+      <object class="SnippetStep" id="42">
+        <name>
+          <null/>
+        </name>
+        <snippetName class="String">InsertIntoEmailQueue</snippetName>
+        <snippetStepComment>
+          <null/>
+        </snippetStepComment>
+      </object>
+      <object class="End" id="43"/>
+    </steps>
+    <blockEndStep class="BlockEndStep"/>
+    <edges class="ArrayList">
+      <object class="TransitionEdge">
+        <from idref="6"/>
+        <to idref="7"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="7"/>
+        <to idref="8"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="8"/>
+        <to idref="9"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="9"/>
+        <to idref="10"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="9"/>
+        <to idref="16"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="9"/>
+        <to idref="19"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="9"/>
+        <to idref="23"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="9"/>
+        <to idref="38"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="9"/>
+        <to idref="41"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="10"/>
+        <to idref="13"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="13"/>
+        <to idref="15"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="16"/>
+        <to idref="17"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="17"/>
+        <to idref="18"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="19"/>
+        <to idref="20"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="20"/>
+        <to idref="21"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="21"/>
+        <to idref="22"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="23"/>
+        <to idref="24"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="23"/>
+        <to idref="26"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="24"/>
+        <to idref="25"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="26"/>
+        <to idref="27"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="26"/>
+        <to idref="30"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="26"/>
+        <to idref="32"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="26"/>
+        <to idref="34"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="26"/>
+        <to idref="36"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="27"/>
+        <to idref="28"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="28"/>
+        <to idref="29"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="30"/>
+        <to idref="31"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="32"/>
+        <to idref="33"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="34"/>
+        <to idref="35"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="36"/>
+        <to idref="37"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="38"/>
+        <to idref="39"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="39"/>
+        <to idref="40"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="41"/>
+        <to idref="42"/>
+      </object>
+      <object class="TransitionEdge">
+        <from idref="42"/>
+        <to idref="43"/>
+      </object>
+    </edges>
+  </property>
+  <property name="browserConfigurationSpecification" class="BrowserConfigurationSpecificationWebKit" serializationversion="25"/>
+</object>
