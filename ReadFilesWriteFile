@@ -1,0 +1,38 @@
+import sys
+import os
+import datetime
+import  glob, re
+
+def scrape ():
+    output = ""
+    directory_in_str=str(r'C:\Users\james.strzalka\Desktop\New folder')
+    for file in os.listdir(directory_in_str):
+        if file.endswith(".txt"):
+          z = os.path.join(directory_in_str,file)
+          #with open(z) as zz:
+          x = open(z)
+          print(x.read)
+          for line in x:
+              for char in line:
+                  if char.isupper():
+                      output += char
+    return output
+
+def writefile(filepath,output):
+
+    fileContents = open(os.path.join(filepath,"answer.txt"),'w')
+    fileContents.write(output)
+    fileContents.close()
+
+
+def main():
+    o = scrape()
+    directory_in_str=str(r'C:\Users\james.strzalka\Desktop\New folder')
+    writefile(directory_in_str, o)
+    
+
+if __name__ == '__main__':
+  main()
+  
+  "Exec Sp_kapowGetLoadIDByTrailerNumber 
+Trailer_Number = "+UPSTrailerArriveAndEmptyUpdates.TrailerNum+"
