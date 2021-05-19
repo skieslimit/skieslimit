@@ -1,0 +1,30 @@
+import sys
+
+def convert(s):
+'''convert to an integer'''
+try:
+    return int(s)
+except(ValueError,TypeError) as e:
+    print("Conversion error {}"\
+           .format(str(e)),
+           file=sys.stderr)
+    return -1
+    
+	
+	#roots.py
+
+def sqrt(x)
+guess = x
+i = 0
+while guess * guess != x and i < 20:
+    guess = (guess + x / guess) / 2.0
+    i +=1
+return guess
+
+def main()
+    print(sqrt(9))
+    print(sqrt(2))
+
+if __name__ == '__main__':
+    main()
+     

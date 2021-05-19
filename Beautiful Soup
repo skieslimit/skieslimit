@@ -1,0 +1,30 @@
+import os, requests, json, datetime, sys 
+from bs4 import BeautifulSoup
+
+def main():
+
+    #call API
+    callUrl = r'http://stggxauto01:4568/'
+    r = requests.get(callUrl).json()
+    fp = r["Filepath"]
+    htmlTag = r["HtmlTag"]
+    WebsiteURL = r["WebsiteUrl"]
+
+    #make soup, extract all text for matching class, parse result list
+    page = requests.get(WebsiteURL, timeout=5)
+    soup = BeautifulSoup(page.content,"html.parser")
+    result = [element.text for element in soup.findAll('li',{"class" : htmlTag})]
+    out = ''.join(map(str,result))
+
+    #set filename
+    dateString = datetime.datetime.now()
+    filename = r"\\CP-Python-Week2-"+str(dateString.year) + "." + str(dateString.month) + "." + str(dateString.day) + "-" + str(dateString.hour) + "." + str(dateString.minute)+".txt"
+
+    #Write file 
+    f = open(fp+filename,"w")
+    f.write(out)
+    f.close()
+
+#main code run
+if __name__ == "__main__":
+    main()
